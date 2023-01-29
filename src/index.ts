@@ -10,6 +10,9 @@ header.render();
 const container = new Component(body, "main", "main-container");
 container.render();
 
+const title = new Component(container.element, "h1", "main-title");
+title.render();
+
 const section = new Component(container.element, "section", "main-section");
 section.render();
 
@@ -17,7 +20,7 @@ const pokemonList = new Component(section.element, "ul", "pokemon-list");
 pokemonList.render();
 
 (async () => {
-  const allPokemonDataFromApi = await getPokemonData(21);
+  const allPokemonDataFromApi = await getPokemonData(40);
 
   const individualPokemon = allPokemonDataFromApi.map((pokemon) => {
     const card = new CardComponent(pokemonList.element, pokemon);
