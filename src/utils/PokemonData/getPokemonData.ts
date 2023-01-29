@@ -1,10 +1,19 @@
-import type { PokemonData } from "./pokemonTypes.js";
-
-const urlApi = "https://pokeapi.co/api/v2/pokemon/";
+import type { PokemonData } from "./types.js";
 
 export const getPokemonData = async (idPokemonUser: number) => {
-  const result = await fetch(`${urlApi}${idPokemonUser}`);
-  const data = (await result.json()) as PokemonData;
+  const allPokemons = [];
 
-  return data;
+  for (let pokemonId = 1; pokemonId <= idPokemonUser; pokemonId++) {
+    const id = pokemonId;
+    const getPokemonData = fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+    allPokemons.push(getPokemonData);
+  }
+
+  const pokemonUnresolvedPromises = await Promise.all(allPokemons);
+  const pokemonInfo = pokemonUnresolvedPromises.map(
+    async (pokemonUnresolvedPromise) => pokemonUnresolvedPromise.json()
+  );
+  const finalPokemonInfo = (await Promise.all(pokemonInfo)) as PokemonData[];
+
+  return finalPokemonInfo;
 };
